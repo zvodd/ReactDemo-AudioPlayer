@@ -1,0 +1,150 @@
+:root {
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1;
+}
+
+:root {
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+.appwrap {
+  /* display: inline-block; */
+  border: solid blueviolet thin;
+  width: 262px;
+  margin: auto 0;
+}
+
+.tasktimer {
+  font-family: "Montserrat";
+  /* box-sizing: box; */
+  display: grid;
+  border: solid red thin;
+  padding: 2px;
+  height: 200px;
+  width: 260px;
+  grid-template-columns: 25% 50% 25%;
+  grid-template-rows: 52% 15% 33%;
+  grid-template-areas:
+    "   time    time    time    "
+    "   title   title   title   "
+    "   left    gostop  right   ";
+}
+
+.tasktimer > * {
+  margin: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+  -o-user-select: none;
+  -moz-user-select: none;
+}
+
+.tasktime {
+  grid-area: time;
+  font-size: 4rem;
+  line-height: 100%;
+  display: inline-flex;
+  flex-flow: column;
+  align-items: flex-end;
+  /* border: thin #cde6be solid; */
+}
+
+.tasktitle {
+  grid-area: title;
+  line-height: 100%;
+  margin: 0 auto;
+  display: inline-flex;
+  flex-flow: column;
+  align-items: flex-start;
+  /* border: thin #d2bee6 solid; */
+}
+
+/* .ss-button {
+  grid-area: gostop;
+  width: 45%;
+  height: 90%;
+  background: #a3a3a3;
+  border-radius: 100%;
+  border: solid medium #4e4e4e;
+  display: inline-flex;
+}
+.ss-button:hover {
+  background: #17a2b8;
+  border-color: #0a4d57;
+} */
+
+.lt-button {
+  grid-area: left;
+}
+
+.rt-button {
+  grid-area: right;
+}
+
+.tasklist {
+  list-style: none;
+  padding-inline: 0;
+}
+
+.taskitem {
+  margin: 0.8rem auto;
+  padding: 0.4rem;
+  border: thin #d2bee6 solid;
+  background-color: #fff9ef;
+  border-radius: 0.2rem;
+}
