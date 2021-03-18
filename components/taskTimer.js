@@ -1,6 +1,7 @@
 import PlayButton from "./svgs/playButton";
 import PauseButton from "./svgs/pauseButton";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
+import ReactHowler from "react-howler";
 
 function int_as_time(it) {
   var s = it % 60;
@@ -10,65 +11,69 @@ function int_as_time(it) {
 }
 
 const TaskTimer = ({ track }) => {
+  const player = useRef(null);
   // const [audio, setAudio] = useState();
-  const [lastTrack, setLastTrack] = useState(null);
-  const [cTime, setcTime] = useState(track.time);
-  const [running, setRunning] = useState(false);
-
-  useEffect(() => {
-    // if (lastTrack){
-    //   for(window["AuTrkEl"]
-    // }
-
-    // New Audio Track
-    if (track && lastTrack !== track) {
-      window["AuTrkEl"] = window?.AuTrkEl || {};
-      const au = new Audio(track.url);
-      window.AuTrkEl[track.url] = au;
-      au.preload = true;
-      // setAudio(track.url);
-      setLastTrack(track.url);
-      console.log("load audio", au);
-    } else {
-      // Same Track
-    }
-    // Clean Up / Dismount
-    return () => {
-      window.AuTrkEl[track.url].pause();
-      // del window.AuTrkEl[track.url]
-    };
-  }, [track]);
-  // const auplay = (ev) => {
-  //   console.log("auplay", ev);
-  //   ev.target.play();
+  // const [lastTrack, setLastTrack] = useState(null);
+  // const cleanUpEffect = () => {
+  //   window.AuTrkEl[track.url].pause();
+  //   // del window.AuTrkEl[track.url]
   // };
-  // const [qplay, play] = useReducer((state, ev) => {
-  //   console.log("qp", state, window.AuTrkEl);
-  //   if (ev == 1 && !state) {
-  //     window.AuTrkEl[audio].addEventListener("canplay", auplay);
-  //     return true;
-  //   }
-  //   return state;
-  // }, false);
+  // useEffect(() => {
+  //   // New Audio Track
+  //   if (track && lastTrack !== track) {
+  //     window["AuTrkEl"] = window?.AuTrkEl || {};
+  //     const au = new Audio(track.url);
+  //     window.AuTrkEl[track.url] = au;
+  //     au.preload = true;
+  //     // setAudio(track.url);
+  //     setLastTrack(track.url);
+  //     console.log("load audio", au);
+  //   } else {
+  //     // Same Track
 
-  // const doplay = () => play(1);
-  const doplay = () => {
-    const au = window.AuTrkEl[track.url];
-    au.play();
-  };
+  //     for (const [url, au] of window["AuTrkEl"]) {
+  //       delete window["AuTrkEl"]["url"];
+  //     }
+  //   }
+  //   // Clean Up / Dismount
+  //   return cleanUpEffect;
+  // }, [track, lastTrack]);
+
+  // const [playing, setPlaying] = useReducer(() => {
+  //   const au = window.AuTrkEl[track.url];
+  //   au.play();
+  // });
+
+  const howler = player.current?.howler || {};
+  const duration = howler.pos();
+  // const duration = window.Howler.pos() || 0;
+  const [playing, setPlaying] = useReducer((state, input) => {
+    console.log(howler);
+    if (howler?.state() === "loaded" || false) {
+      return input;
+    }
+    return false;
+  }, false);
+
   return (
     <div className="tasktimer">
       <div className="tasktime">
-        <span>{int_as_time(track.time)}</span>
+        <span>{int_as_time(duration)}</span>
       </div>
       <div className="tasktitle">
         <span>{track.title}</span>
       </div>
       <button className="lt-button">-</button>
-      <div className="ss-button" onClick={doplay}>
-        <PlayButton className="ss-inner" />
+      <div className="pp-button" onClick={() => setPlaying(!playing)}>
+        {playing ? <PauseButton /> : <PlayButton />}
       </div>
       <button className="rt-button">+</button>
+      <ReactHowler
+        src={track.url}
+        playing={playing}
+        ref={player}
+        onStop={() => setPlaying(false)}
+      />
     </div>
   );
 };
