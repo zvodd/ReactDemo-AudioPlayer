@@ -45,7 +45,8 @@ const TaskTimer = ({ track }) => {
   // });
 
   const howler = player.current?.howler || {};
-  const duration = howler.pos();
+  console.log(typeof howler?.pos);
+  const duration = 0; // (howler?.pos) ? ;
   // const duration = window.Howler.pos() || 0;
   const [playing, setPlaying] = useReducer((state, input) => {
     console.log(howler);
