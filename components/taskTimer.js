@@ -11,6 +11,7 @@ function int_as_time(it) {
 }
 
 const TaskTimer = ({ track }) => {
+  console.log("TaskTimer");
   const player = useRef(null);
   // const [audio, setAudio] = useState();
   // const [lastTrack, setLastTrack] = useState(null);
@@ -46,10 +47,28 @@ const TaskTimer = ({ track }) => {
 
   const howler = player.current?.howler || {};
   console.log(typeof howler?.pos);
-  const duration = 0; // (howler?.pos) ? ;
+  const [updateInterval, setUpdateInerval] = useState(null);
+  const [duration, setDuration] = useState(0); // (howler?.pos) ? ;
   // const duration = window.Howler.pos() || 0;
+  useEffect(() => {
+    console.log("useEffect for Update Duration");
+    if (updateInterval === null) {
+      if (player.current?.howler) {
+        const upInt = window.setInterval(() => {
+          const howlpos = window.Howler.pos();
+          console.log("Howler Pos", howlpos);
+          setDuration(howlpos);
+        }, 1000);
+        setUpdateInerval(upInt);
+        return () => {
+          window.clearInterval(updateInterval);
+        };
+      }
+    }
+  }, [updateInterval]);
+
   const [playing, setPlaying] = useReducer((state, input) => {
-    console.log(howler);
+    console.log("Howler is:", howler);
     if (howler?.state() === "loaded" || false) {
       return input;
     }

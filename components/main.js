@@ -5,7 +5,7 @@ import { int_as_time } from "./utils";
 
 const Main = () => {
   const { state, dispatch } = useContext(trackCtx);
-  console.log(state);
+  console.log("Main State:", state);
 
   // const [curTask, setCurTask] = useState(trackCtx[0]);
   const replaceTask = (args) => dispatch({ type: "update", args });
