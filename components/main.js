@@ -1,57 +1,75 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { trackCtx } from "../components/tracksProvider";
 import TaskTimer from "./taskTimer";
 import { int_as_time } from "./utils";
 
 const Main = () => {
   const { state, dispatch } = useContext(trackCtx);
-  console.log(state);
-
-  // const [curTask, setCurTask] = useState(trackCtx[0]);
-  const replaceTask = (args) => dispatch({ type: "update", args });
-
-  // useEffect(() => initializeTasks(setTracks), []);
-  useEffect(() => console.log("Tasks ∆"), []);
+  const activeTrack = state.tracks?.[state.activeTrackId] || state.tracks?.[0];
+  const selectTrack = (id) => dispatch({ type: "select", id });
+  const goToPrevious = () => {
+    const keys = Object.keys(state.tracks || {});
+    const currentIndex = keys.indexOf(String(state.activeTrackId));
+    const previousIndex = currentIndex <= 0 ? keys.length - 1 : currentIndex - 1;
+    selectTrack(Number(keys[previousIndex]));
+  };
+  const goToNext = () => {
+    const keys = Object.keys(state.tracks || {});
+    const currentIndex = keys.indexOf(String(state.activeTrackId));
+    const nextIndex = currentIndex >= keys.length - 1 ? 0 : currentIndex + 1;
+    selectTrack(Number(keys[nextIndex]));
+  };
 
   return (
-    <div className="appwrap">
-      <div
-        style={{
-          fontSize: "40%",
-          position: "absolute",
-          right: "0",
-          margin: "2em"
-        }}
-      >
-        <pre> {JSON.stringify(/*Object.entries(*/ state /*)*/, null, 2)}</pre>
-      </div>
+    <div className="appwrap reader-shell">
+      <header className="reader-header">
+        <p className="reader-kicker">Read / listen</p>
+        <h1>Chapter player</h1>
+        <p>
+          A minimal ebook-style reader that keeps the currently selected chapter
+          in sync with the audio player.
+        </p>
+      </header>
 
-      <div>Plays Audio.</div>
-      {state.tracks?.[0] ? (
-        <TaskTimer track={state.tracks?.[0]} key={0} />
+      {activeTrack ? (
+        <TaskTimer
+          track={activeTrack}
+          onPrevious={goToPrevious}
+          onNext={goToNext}
+          key={state.activeTrackId}
+        />
       ) : (
         <span>Loader</span>
       )}
-      <div>
-        <ul className="tasklist">
-          {Object.entries(state.tracks).map(([num, task]) => (
+
+      <section>
+        <ul className="chapterlist">
+          {Object.entries(state.tracks || {}).map(([num, chapter]) => (
             <Chapter
               key={num}
-              chap={task}
-              update={(v) => replaceTask(num, v)}
+              chap={chapter}
+              selected={String(state.activeTrackId) === num}
+              onSelect={() => selectTrack(Number(num))}
             />
           ))}
         </ul>
-      </div>
+      </section>
     </div>
   );
 };
 
-const Chapter = ({ chap, update }) => {
+const Chapter = ({ chap, selected, onSelect }) => {
   return (
-    <li>
-      <marquee style={{ display: "inline" }}> {chap.title} - </marquee>
-      <span> [{int_as_time(chap.time)}] </span>
+    <li className="chapteritem">
+      <button
+        type="button"
+        className={`chapter-button ${selected ? "is-active" : ""}`}
+        onClick={onSelect}
+      >
+        <span className="chapter-label">{chap.title}</span>
+        <span className="chapter-excerpt">{chap.excerpt}</span>
+        <span className="chapter-duration">[{int_as_time(chap.time)}]</span>
+      </button>
     </li>
   );
 };

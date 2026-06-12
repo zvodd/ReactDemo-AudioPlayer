@@ -1,16 +1,14 @@
-Task List
+Chapter Reader / Audio Player
 
 ```
 {
-	id: "<string>
-	title: <string>
-	emoji: <string>
-	isComplete: <BOOL>
-	time: int
-	timeRem: int
-	timeSpent: int
-}+OPT+{
-	selected: <BOOL>
-	chosen: <BOOL>
+	activeTrackId: <number>
+	tracks: {
+		id: <number>
+		title: <string>
+		excerpt: <string>
+		time: <int>
+		url: <string | null>
+	}
 }
 ```
